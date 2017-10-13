@@ -22,9 +22,6 @@ import ehb.builderfactory.LocalBuilder;
 import ehb.global.Global;
 import ehb.instrumentation.IInstrumenter;
 
-/**
- * ͳ�Ʒ���������
- * */
 public class MethodCoverageFieldInstrumenter extends LocalBuilder implements IInstrumenter{
 	
 	SootClass sc;
