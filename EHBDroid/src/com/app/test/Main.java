@@ -24,7 +24,7 @@ import soot.jimple.InvokeExpr;
 import soot.options.Options;
 
 /**
- * good programming<--beauty<--perfect
+ * This class the entry class of ENBDroid.
  */
 public class Main {
 
@@ -40,6 +40,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		// windows
 //		String params[] = { "-android-jars", "D:/SDK/platforms", "-process-dir",
 //				"L:/EHBbenchmarks/benchmark/" + AppDir.APPNAME + ".apk" };
 
@@ -49,6 +50,36 @@ public class Main {
 		analyzeXML(apk);
 		analyzeCode(apk, params);
 		printEHBResult();
+	}
+
+	public static void initSoot(String[] args) {
+
+		// windows
+//		Options.v().set_soot_classpath(args[3] + ";" + "lib/rt.jar;" + "lib/jce.jar;" + "lib/tools.jar;"
+//				+ "lib/android.jar;" + "lib/android-support-v4.jar;" + "bin");
+
+		// mac
+		Options.v().set_soot_classpath(args[3] + ":" + "lib/rt.jar:" + "lib/jce.jar:" + "lib/tools.jar:"
+				+ "lib/android.jar:" + "lib/android-support-v4.jar:" + "bin");
+
+		Options.v().set_validate(true);
+		// Options.v().set_android_jars(args[1]);
+		Options.v().set_src_prec(Options.src_prec_apk);
+//		 Options.v().set_output_format(Options.output_format_jimple);
+		Options.v().set_output_format(Options.output_format_dex);
+		Options.v().set_output_dir(output);
+		Options.v().set_allow_phantom_refs(true);
+
+		for (String classAsSignature : CallGraphBuilder.getClassesAsSignature()) {
+			Scene.v().addBasicClass(classAsSignature, SootClass.SIGNATURES);
+		}
+		for (String classAsBody : CallGraphBuilder.getApplicationClasses()) {
+			Scene.v().addBasicClass(classAsBody, SootClass.BODIES);
+		}
+		for (String className : CallGraphBuilder.getEntrypoints()) {
+			Scene.v().addBasicClass(className, SootClass.BODIES);
+		}
+		Scene.v().loadNecessaryClasses();
 	}
 
 	public static void analyzeXML(String apk) {
@@ -165,37 +196,6 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void initSoot(String[] args) {
-
-		// windows
-//		Options.v().set_soot_classpath(args[3] + ";" + "lib/rt.jar;" + "lib/jce.jar;" + "lib/tools.jar;"
-//				+ "lib/android.jar;" + "lib/android-support-v4.jar;" + "bin");
-
-		// mac
-		Options.v().set_soot_classpath(args[3] + ":" + "lib/rt.jar:" + "lib/jce.jar:" + "lib/tools.jar:"
-				+ "lib/android.jar:" + "lib/android-support-v4.jar:" + "bin");
-
-		Options.v().set_validate(true);
-		// Options.v().set_android_jars(args[1]);
-		Options.v().set_src_prec(Options.src_prec_apk);
-//		 Options.v().set_output_format(Options.output_format_jimple);
-		Options.v().set_output_format(Options.output_format_dex);
-		Options.v().set_output_dir(output);
-		Options.v().set_allow_phantom_refs(true);
-
-		for (String classAsSignature : CallGraphBuilder.getClassesAsSignature()) {
-			Scene.v().addBasicClass(classAsSignature, SootClass.SIGNATURES);
-		}
-		for (String classAsBody : CallGraphBuilder.getApplicationClasses()) {
-			Scene.v().addBasicClass(classAsBody, SootClass.BODIES);
-		}
-		for (String className : CallGraphBuilder.getEntrypoints()) {
-			Scene.v().addBasicClass(className, SootClass.BODIES);
-		}
-		Scene.v().loadNecessaryClasses();
-		
 	}
 
 	public static final Set<String> signCheckStmts = new HashSet<String>();
