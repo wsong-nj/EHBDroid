@@ -57,6 +57,7 @@ public class OnCreateOptionsMenu extends MethodBuilder{
 		addInvokeStmt(Jimple.v().newStaticInvokeExpr(systemEventHandlerAddMenuItem_method.makeRef(),paramValues));
 		addInvokeStmt(Jimple.v().newStaticInvokeExpr(uiEventHandlerAddMenuItem_method.makeRef(),paramValues));
 		addInvokeStmt(Jimple.v().newStaticInvokeExpr(interAppEventHandlerAddMenuItem_method.makeRef(),paramValues));
+		addReturnTypeStmt(IntConstant.v(1));
 	}
 
 	@Override

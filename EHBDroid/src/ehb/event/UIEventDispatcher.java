@@ -1,44 +1,21 @@
 package ehb.event;
 
-//94ÐÐ×¢ÊÍµôbody.validate();
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import soot.Body;
-import soot.Local;
-import soot.PatchingChain;
-import soot.RefType;
-import soot.SootClass;
-import soot.SootMethod;
-import soot.Type;
-import soot.Unit;
-import soot.Value;
-import soot.jimple.DefinitionStmt;
-import soot.jimple.IntConstant;
-import soot.jimple.InvokeExpr;
-import soot.jimple.InvokeStmt;
-import soot.jimple.Jimple;
-import soot.jimple.NewExpr;
-import soot.jimple.StringConstant;
-import soot.jimple.ThisRef;
-
 import com.app.test.CallBack;
 import com.app.test.methodBuilder.DoDialogReflect;
 import com.app.test.methodBuilder.DoReflect;
-
 import ehb.analysis.LocalAnalysis;
-import ehb.analysis.MethodAnalysis;
 import ehb.event.EventRecognizerForCode.AndroidEvent;
-import ehb.global.EHBOptions;
+import soot.*;
+import soot.jimple.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class UIEventDispatcher extends EventDispatcher{
 	
 	Logger logger = Logger.getLogger(this.getClass().getName());
-	
-	boolean isJumpingEvent;
-	
+
 	public UIEventDispatcher(InvokeStmt stmt, Body b, AndroidEvent ae) {
 		super(stmt, b, ae);
 	}
@@ -65,23 +42,9 @@ public class UIEventDispatcher extends EventDispatcher{
 				values.add(invoker);
 				values.add(listener);
 				values.add(StringConstant.v(callbackName));
-				boolean isJumping = EHBOptions.v().isStaticAnalysis()?isJumpingMethod(callback):false;
-				String msg = "Listener: "+listenerSootClass.getName()+" Callback: "+callback.getSignature()+" is Jumpling event? "+isJumping;
-//				logger.log(Level.WARNING, msg);
-				if(isJumping)
-					values.add(IntConstant.v(1));
-				else {
-					values.add(IntConstant.v(0));
-				}
 				classifyEvent(ae, values, units, sc);		
 			}
 		}
-	}
-
-	private boolean isJumpingMethod(SootMethod callback) {
-		MethodAnalysis methodAnalysis = new MethodAnalysis(callback);
-		methodAnalysis.analyze();
-		return methodAnalysis.isJumpMethod();
 	}
 
 	private void classifyEvent(AndroidEvent ae, List<Value> values,PatchingChain<Unit> units, SootClass sc) {
@@ -92,7 +55,7 @@ public class UIEventDispatcher extends EventDispatcher{
 				addDoReflectMethod(sc);
 			SootMethod doReflect = sc.getMethod(DoReflect.SUBSIGNATURE);
 			units.insertBefore( Jimple.v().newInvokeStmt(Jimple.v().newStaticInvokeExpr(doReflect.makeRef(),values)), stmt);
-//			body.validate();
+			body.validate();
 		}
 		//else if stmt is a dialog event, base.doReflect(dialog, listener, callback);
 		else if(ae.equals(AndroidEvent.DialogEvent)){
@@ -100,7 +63,7 @@ public class UIEventDispatcher extends EventDispatcher{
 				addDoDialogReflectMethod(sc);
 			SootMethod doDialogReflect = sc.getMethod(DoDialogReflect.SUBSIGNATURE);
 			units.insertBefore( Jimple.v().newInvokeStmt(Jimple.v().newStaticInvokeExpr(doDialogReflect.makeRef(),values)), stmt);
-//			body.validate();
+			body.validate();
 		}
 	}
 	

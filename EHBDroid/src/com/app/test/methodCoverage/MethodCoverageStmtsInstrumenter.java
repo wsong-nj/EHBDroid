@@ -3,6 +3,7 @@ package com.app.test.methodCoverage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.app.test.constant.EHBField;
 import soot.Body;
 import soot.IntType;
 import soot.Local;
@@ -16,7 +17,6 @@ import soot.jimple.AssignStmt;
 import soot.jimple.IntConstant;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
-import soot.jimple.internal.JimpleLocal;
 
 import com.app.test.AppDir;
 import com.app.test.Constants;
@@ -57,7 +57,7 @@ public class MethodCoverageStmtsInstrumenter implements IInstrumenter{
 	 * 
 	 * */
 	public void instrumentPlusPlusStmt(int methodIndex, Body b){
-		SootField methodCountListField = b.getMethod().getDeclaringClass().getFieldByName(Constants.EHBField.METHODCOUNTLIST);
+		SootField methodCountListField = b.getMethod().getDeclaringClass().getFieldByName(EHBField.METHODCOUNTLIST);
 		SootField globalValue = Scene.v().getSootClass(AppDir.class.getName()).getFieldByName("visitedMethodCount");
 		PatchingChain<Unit> units = b.getUnits();
 		Unit tail = units.getLast();

@@ -1,19 +1,5 @@
 package com.app.test.event;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import soot.Unit;
-import soot.jimple.InvokeStmt;
-import soot.jimple.SpecialInvokeExpr;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -30,20 +16,28 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
-
 import com.app.test.AppDir;
 import com.app.test.CallBack;
-import com.app.test.Constants;
-import com.app.test.Constants.EHBField;
+import com.app.test.constant.EHBField;
 import com.app.test.Util;
 import com.app.test.data.AndroidIntentFilter;
+
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Trigger System events from Manifest.xml and code.
  * */
 public class SystemEventHandler{
 
-	public static final String itemName = Constants.sysTest; 
+	public static final String itemName = "sTest";
 	public static String file = AppDir.file;
 	
 	/**
@@ -106,7 +100,7 @@ public class SystemEventHandler{
 		} catch (Exception e) {
 			Util.LogException(e);
 		}finally{
-			Log.v("EVENT", AppDir.visitedMethodCount+"");
+			Log.e("EVENT", AppDir.visitedMethodCount+"");
 		}
 	}
 	
@@ -123,7 +117,6 @@ public class SystemEventHandler{
 		});
 	}
 	
-	//´«¸ÐÆ÷µ¥¶À¿¼ÂÇ
 	/**
 	 * trigger service events
 	 * @param m Method to be Triggered.
@@ -257,7 +250,7 @@ public class SystemEventHandler{
 			}
 		}
 		if(action==null) {
-			Log.v("EVENT", " Intent Action is null");
+			Log.e("EVENT", " Intent Action is null");
 			return null;
 		};
 		
@@ -282,7 +275,7 @@ public class SystemEventHandler{
 			action = intentFilter.getAction(0);
 		}
 		else {
-			Log.v("EVENT", " Intent Action is null");
+			Log.e("EVENT", " Intent Action is null");
 			return null;
 		}
 		Intent intent = new Intent(action);

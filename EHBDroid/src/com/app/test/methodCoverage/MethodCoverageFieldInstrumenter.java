@@ -2,6 +2,7 @@ package com.app.test.methodCoverage;
 
 import java.util.List;
 
+import com.app.test.constant.EHBField;
 import soot.Body;
 import soot.Local;
 import soot.Modifier;
@@ -22,7 +23,7 @@ import ehb.global.Global;
 import ehb.instrumentation.IInstrumenter;
 
 /**
- * Í³¼Æ·½·¨¸²¸ÇÂÊ
+ * Í³ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * */
 public class MethodCoverageFieldInstrumenter extends LocalBuilder implements IInstrumenter{
 	
@@ -45,11 +46,11 @@ public class MethodCoverageFieldInstrumenter extends LocalBuilder implements IIn
 	 * */
 	private void addMethodListForClass() {
 		List<SootClass> visitedClasses = Global.v().getVisitedClasses();
-		SootField methodCountList = new SootField(Constants.EHBField.METHODCOUNTLIST, Constants.linkedList_Type, Modifier.PUBLIC|Modifier.STATIC);
-		if(!sc.declaresFieldByName(Constants.EHBField.METHODCOUNTLIST)){
+		SootField methodCountList = new SootField(EHBField.METHODCOUNTLIST, Constants.linkedList_Type, Modifier.PUBLIC|Modifier.STATIC);
+		if(!sc.declaresFieldByName(EHBField.METHODCOUNTLIST)){
 			sc.addField(methodCountList);
 		}
-		SootField sootField = sc.getFieldByName(Constants.EHBField.METHODCOUNTLIST);
+		SootField sootField = sc.getFieldByName(EHBField.METHODCOUNTLIST);
 		if(sc.declaresMethodByName("<clinit>")){
 			SootMethod clinitMethod = sc.getMethodByName("<clinit>");
 			Body b = clinitMethod.retrieveActiveBody();

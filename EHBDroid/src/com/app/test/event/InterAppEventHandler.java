@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 
 import com.app.test.AppDir;
-import com.app.test.Constants;
 import com.app.test.Util;
 import com.app.test.data.AndroidIntentFilter;
 import com.app.test.data.AndroidIntentFilter.AuthorityEntry;
@@ -23,8 +22,7 @@ import com.app.test.data.PatternMatcher;
 
 public class InterAppEventHandler {
 
-//	protected static String menuName = Constants.interTest;
-	public static final String itemName = Constants.interTest; 
+	public static final String itemName = "iTest";
 
 	public static String file = AppDir.file;	
 	
@@ -40,10 +38,6 @@ public class InterAppEventHandler {
 			}
 		});
 	}
-	
-//	public void doTest(Activity activity) {
-//		doInterAppEventTest(activity);
-//	}
 	
 	public static void doInterAppEventTest(Activity activity){
 		try {
@@ -61,7 +55,7 @@ public class InterAppEventHandler {
 		} catch (Exception e) {
 			Util.LogException(e);
 		}finally{
-			Log.v("EVENT", AppDir.visitedMethodCount+"");
+			Log.e("EVENT", AppDir.visitedMethodCount+"");
 		}
 	}
 
@@ -74,6 +68,7 @@ public class InterAppEventHandler {
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			ois.readObject();
+
 			// activitytofilter was in the second position.
 			Object readObject = ois.readObject();
 			activityToFilters = (Map<String, List<AndroidIntentFilter>>)readObject;
@@ -85,43 +80,7 @@ public class InterAppEventHandler {
 		}
 		return activityToFilters;
 	}
-	
-	
-	/**
-	 * build intent according to intentFilter from xml
-	 * @param intentFilter intent filter from AndroidManifest.xml.
-	 * @return intent An intent used to trigger inter-app events.
-	 * */
-//	private static Intent initIntent(AndroidIntentFilter intentFilter) {
-//		String action = null;
-//		
-//		if(intentFilter.countActions()==0){
-//			return null;
-//		}
-//		for(String mAction: intentFilter.getmActions()){
-//			if(!mAction.equals(Intent.ACTION_MAIN)){
-//				action = mAction;
-//				break;
-//			}
-//		}
-//		if(action==null) {
-//			Log.v("EVENT", " Intent Action is null");
-//			return null;
-//		};
-//		
-//		Intent intent = new Intent(action);
-//		if(intentFilter.countCategories()>0){
-//			intent.addCategory(intentFilter.getCategory(0));
-//		}
-//		else 
-//			intent.addCategory(Intent.CATEGORY_DEFAULT);
-//		if(intentFilter.countDataTypes()>0){
-//			intent.setType(intentFilter.getDataType(0));
-//		}
-//		return intent;
-//	}
-	
-	
+
 	/**
 	 * build intent object according to androidIntentFilter.
 	 * buliding method relys on mapping mechnisam between intent and intentfilter.

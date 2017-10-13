@@ -47,8 +47,6 @@ public class Global {
 	public void setCallGraph(CallGraph callGraph) {
 		this.callGraph = callGraph;
 	}
-
-	private SootClass mActivity;
 	
 	public void setApk(String apk) {
 		this.apk = apk;
@@ -109,7 +107,7 @@ public class Global {
 		return pkg;
 	}
 
-	public SootClass getmActivity(){
+	public SootClass getMainActivityClass(){
 		return Scene.v().getSootClass(mainActivity);
 	}
 	

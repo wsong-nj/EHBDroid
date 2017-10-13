@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.app.test.constant.EHBField;
 import soot.Body;
 import soot.Local;
 import soot.PatchingChain;
@@ -59,7 +60,7 @@ public class OnCreateOptionMenuModifier extends MethodModifier{
 
 	private SootField getMenuField(Body b) {
 		SootClass declaringClass = b.getMethod().getDeclaringClass();
-		String actmenu = Constants.EHBField.ACTIVITYMENU;
+		String actmenu = EHBField.ACTIVITYMENU;
 		
 		if(!declaringClass.declaresFieldByName(actmenu))
 			throw new RuntimeException("Activity menu field does not be declared");

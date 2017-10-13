@@ -83,7 +83,7 @@ public class CoverageBodyInstrumenter extends LocalBuilder implements
 				if (list.size() > 1) {
 					try {
 						List<Unit> predsOf = graph.getPredsOf(unit);
-						for (int i = 0; i < predsOf.size(); i++) {// 如果有多个分支，则将该语句插入到语句的前驱的前面
+						for (int i = 0; i < predsOf.size(); i++) {
 							Unit preUnit = predsOf.get(i);
 							if (isCaughtExceptionStmt(preUnit))
 								continue;
@@ -111,7 +111,7 @@ public class CoverageBodyInstrumenter extends LocalBuilder implements
 						}
 						throw new RuntimeException();
 					}
-				} else if (list.size() == 1) { // 如果只有一个分支，则将语句插入到该语句的前面
+				} else if (list.size() == 1) {
 					if (isCaughtExceptionStmt(unit))
 						continue;
 
@@ -228,7 +228,6 @@ public class CoverageBodyInstrumenter extends LocalBuilder implements
 							.getMethod().getDeclaringClass(), body, body
 							.getMethod(), unit, " Unit do not have preds!"
 							+ " E: " + e);
-					// throw new RuntimeException("Unit: "+unit+" ");
 				}
 
 			}

@@ -1,79 +1,17 @@
 package com.app.test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import soot.RefType;
-import soot.Scene;
-import soot.SootMethod;
-
-import android.view.ContextMenu;
-import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import ehb.instrumentation.codecoverage.CoverageToolkit;
-
 import com.app.test.event.InterAppEvent;
 import com.app.test.event.ReceiverEvent;
 import com.app.test.event.SystemEvent;
 import com.app.test.event.UIEvent;
+import ehb.instrumentation.codecoverage.CoverageToolkit;
+import soot.RefType;
+import soot.Scene;
+import soot.SootMethod;
 
 
 public class Constants {
 
-	public static final String uiTest = "uTest";
-	public static final String sysTest = "sTest";
-	public static final String interTest = "iTest";
-	
-	public static class LogTag{
-		public static final String menuTag = "MENU";
-		public static final String exceptionTag = "EXCEPTION";
-		public static final String eventTag = "EVENT";
-		public static final String countTag = "COUNT";
-		public static final String sysoutTag = "SYSOUT";
-	}
-	
-	public static class EHBField{
-		
-		//the follow constants will be used as fields.
-		public static Set<String> eventsLinkedList = new HashSet<>();
-		public static Set<String> visited = new HashSet<>();
-
-		//the following 6 field will be instrumented as fields.
-		//Avoid to collect the same event. isVisited=1 means event has been collected. 
-		public static final String ISVISITED = "isVisited";
-		
-		//UI, system, inter-App events linkedList, will be instrumented in activity
-		public static final String UIEVENTLINKEDLIST = "uieventlinkedlist";
-		public static final String SYSTEMEVENTLINKEDLIST = "systemeventlinkedlist";
-		public static final String INTERAPPEVENTLINKEDLIST = "interappeventlinkedlist";
-		public static final String ACTIVITYMENU = "activityMenu";
-		public static final String CONTEXTMENU = "contextMenu";
-		
-		//method coverage
-		public static final String METHODCOUNTLIST = "methodCountList";
-		
-		static {
-			eventsLinkedList.add(UIEVENTLINKEDLIST);
-			eventsLinkedList.add(SYSTEMEVENTLINKEDLIST);
-			eventsLinkedList.add(INTERAPPEVENTLINKEDLIST);
-			
-			visited.add(ISVISITED);
-		}
-	}
-	
-	public static class EHBMethod{
-		public static String onCreateOptionsMenu_activity = "boolean onCreateOptionsMenu(android.view.Menu)";
-		public static String onMenuItemClick_Name = "boolean onMenuItemClick(android.view.MenuItem)";
-		public static String onListItemClick_Name = "void onListItemClick(android.widget.ListView,android.view.View,int,long)";
-		
-		public static String onOptionsItemSelected_Name = "boolean onOptionsItemSelected(android.view.MenuItem)";
-		public static String onContextItemSelected_Name = "boolean onContextItemSelected(android.view.MenuItem)";
-	}
-	
-	public static class EHBClass{
-		public static final String CallBack = "com.app.test.CallBack";
-	}
-	
 	//Android Type
 	public static RefType menu_Type = RefType.v("android.view.Menu");
 	public static RefType contextMenu_Type = RefType.v("android.view.ContextMenu");
@@ -164,7 +102,7 @@ public class Constants {
 
 	//self defined methods
 	public static SootMethod utilLogException_method = Scene.v().getMethod("<com.app.test.Util: void LogException(java.lang.Exception)>");
-	public static SootMethod uiEventinit_method = Scene.v().getMethod("<com.app.test.event.UIEvent: void <init>(java.lang.Object,java.lang.Object,java.lang.String,boolean)>");
+	public static SootMethod uiEventinit_method = Scene.v().getMethod("<com.app.test.event.UIEvent: void <init>(java.lang.Object,java.lang.Object,java.lang.String)>");
 	public static SootMethod systemEventinit_method = Scene.v().getMethod("<com.app.test.event.SystemEvent: void <init>(java.lang.Object,java.lang.Object,java.lang.String)>");
 	public static SootMethod receiverEventinit_method = Scene.v().getMethod("<com.app.test.event.ReceiverEvent: void <init>(java.lang.Object,java.lang.Object,java.lang.String,android.content.IntentFilter)>");
 	public static SootMethod interAppEventinit_method = Scene.v().getMethod("<com.app.test.event.InterAppEvent: void <init>(java.lang.Object,android.content.IntentFilter)>");

@@ -15,8 +15,7 @@ public class SystemEventConstants {
 			CallBack.service_registerListener2,
 			CallBack.service_registerListener3,
 			CallBack.service_registerListener4,
-			CallBack.service_requestAudioFocus, 
-			//ÔÝ²»¿¼ÂÇ
+			CallBack.service_requestAudioFocus,
 			CallBack.service_listen};
 	public static final String[] serviceType2 = {CallBack.service_requestSingleUpdate};
 	public static final String[] serviceType4 = {CallBack.service_requestLocationUpdates};

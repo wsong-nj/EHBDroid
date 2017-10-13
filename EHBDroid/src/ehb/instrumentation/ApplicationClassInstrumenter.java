@@ -4,10 +4,18 @@ import soot.Scene;
 import soot.SootClass;
 import ehb.analysis.CallGraphBuilder;
 
+import java.util.Set;
+
 /**
  * Application classes instrumenter.
  * */
 public class ApplicationClassInstrumenter implements IInstrumenter {
+
+	private Set<String> applicationClasses;
+
+	public ApplicationClassInstrumenter(Set<String> applicationClasses) {
+		this.applicationClasses = applicationClasses;
+	}
 
 	/**
 	 * instrument application classes
@@ -18,12 +26,12 @@ public class ApplicationClassInstrumenter implements IInstrumenter {
 	}
 
 	private void addNewClasses() {
-		for(String classAsApplication:CallGraphBuilder.getApplicationClasses()){
-			if(!classAsApplication.startsWith("android")){
-				SootClass sClass = Scene.v().getSootClass(classAsApplication);
-				if(!Scene.v().getApplicationClasses().contains(sClass)){
-					sClass.setApplicationClass();
-				}
+		for (String applicationClass : applicationClasses) {
+			if(applicationClass.startsWith("android"))
+				continue;
+			SootClass sootClass = Scene.v().getSootClass(applicationClass);
+			if(!Scene.v().getApplicationClasses().contains(sootClass)){
+				sootClass.setApplicationClass();
 			}
 		}
 	}

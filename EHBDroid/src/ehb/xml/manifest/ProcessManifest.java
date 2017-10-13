@@ -62,7 +62,6 @@ public class ProcessManifest implements GlobalHost{
 	private Map<String, List<AndroidIntentFilter>> receiverToFilters = new HashMap<String, List<AndroidIntentFilter>>();
 	private Map<String, List<AndroidIntentFilter>> serviceToFilters = new HashMap<String, List<AndroidIntentFilter>>();
 	
-//	List<ActivityAndFilter> aFilters = new ArrayList<ActivityAndFilter>();
 	/**
 	 * Opens the given apk file and provides the given handler with a stream for
 	 * accessing the contained android manifest file
@@ -151,7 +150,7 @@ public class ProcessManifest implements GlobalHost{
 								continue;							
 							// Get the class name
 							attrValue = getAttributeValue(parser, "name");
-							//×¢ÊÍ5.13
+							//×¢ï¿½ï¿½5.13
 							//entryPointsClasses.add(expandClassName(attrValue));
 						}
 						else if (tagName.equals("receiver")) {
@@ -166,7 +165,7 @@ public class ProcessManifest implements GlobalHost{
 							attrValue = getAttributeValue(parser, "name");
 							receiverName = expandClassName(attrValue);
 							receiverToFilters.put(receiverName, null);
-							//×¢ÊÍ5.13
+							//×¢ï¿½ï¿½5.13
 							//entryPointsClasses.add(expandClassName(attrValue));
 						}
 						else if (tagName.equals("service")) {

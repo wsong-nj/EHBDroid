@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -343,9 +342,6 @@ public class AndroidIntentFilter implements Serializable {
      * and any MIME types you receive from outside of Android should be
      * converted to lower case before supplying them here.</em></p>
      *
-     * <p>Throws {@link MalformedMimeTypeException} if the given MIME type is
-     * not syntactically correct.
-     *
      * @param type Name of the data type to match, i.e. "vnd.android.cursor.dir/person".
      *
      * @see #matchData
@@ -514,7 +510,7 @@ public class AndroidIntentFilter implements Serializable {
             if (host == null) {
                 return NO_MATCH_DATA;
             }
-            if (false) Log.v("IntentFilter",
+            if (false) Log.e("IntentFilter",
                     "Match host " + host + ": " + mHost);
             if (mWild) {
                 if (host.length() < mHost.length()) {
@@ -913,7 +909,7 @@ public class AndroidIntentFilter implements Serializable {
     public final int match(String action, String type, String scheme,
             Uri data, Set<String> categories, String logTag) {
         if (action != null && !matchAction(action)) {
-            if (false) Log.v(
+            if (false) Log.e(
                 logTag, "No matching action " + action + " for " + this);
             return NO_MATCH_ACTION;
         }
@@ -922,11 +918,11 @@ public class AndroidIntentFilter implements Serializable {
         if (dataMatch < 0) {
             if (false) {
                 if (dataMatch == NO_MATCH_TYPE) {
-                    Log.v(logTag, "No matching type " + type
+                    Log.e(logTag, "No matching type " + type
                           + " for " + this);
                 }
                 if (dataMatch == NO_MATCH_DATA) {
-                    Log.v(logTag, "No matching scheme/path " + data
+                    Log.e(logTag, "No matching scheme/path " + data
                           + " for " + this);
                 }
             }
@@ -936,7 +932,7 @@ public class AndroidIntentFilter implements Serializable {
         String categoryMismatch = matchCategories(categories);
         if (categoryMismatch != null) {
             if (false) {
-                Log.v(logTag, "No matching category " + categoryMismatch + " for " + this);
+                Log.e(logTag, "No matching category " + categoryMismatch + " for " + this);
             }
             return NO_MATCH_CATEGORY;
         }

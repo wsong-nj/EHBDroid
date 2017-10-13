@@ -1,24 +1,16 @@
 package com.app.test;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import ehb.analysis.CallGraphBuilder;
 import soot.Body;
 import soot.BodyTransformer;
 import soot.PatchingChain;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Unit;
-import soot.jimple.AbstractStmtSwitch;
-import soot.jimple.AssignStmt;
-import soot.util.Chain;
-
-import com.app.test.methodCoverage.MethodCoverageFieldInstrumenter;
-import com.app.test.methodCoverage.MethodCoverageStmtsInstrumenter;
 
 import ehb.global.Global;
 import ehb.global.GlobalHost;
@@ -41,62 +33,51 @@ import ehb.sign.SignCheckRemover;
  * While the the belonging activity of event that defined in XML or method can
  * be easily found, there is no need to dispath them.
  * 
- * 2. In event triggerrig phase: UIEvent and SystemEvent¡¢InterAppEvent are
+ * 2. In event triggerrig phase: UIEvent and SystemEventInterAppEvent are
  * triggerred seperately. UIEvent is controlled by "Test";
- * SystemEvent¡¢InterAppEvent are controlled by "SysTest";
+ * SystemEventInterAppEvent are controlled by "SysTest";
  * 
  */
 public class AppBodyTransformer extends BodyTransformer implements GlobalHost {
 
 	public static Set<String> activities = (Set<String>) (((HashSet<String>) Global.v().getActivities()).clone());
-	public static boolean classIntrumented = false;
-
-	private String lastClass = ""; // recording the last class name
-	private String mainActivity = Global.v().getMainActivity();
+	public static boolean classInstrumented = false;
+	private String previousClassName = ""; // previous class name
 
 	@Override
 	protected void internalTransform(Body b, String phaseName, Map<String, String> options) {
+		if (!classInstrumented) {
+			instrumentApplicationClasses();
+			instrumentFieldForMainActivity();
+			classInstrumented = true;
+		}
+
 		SootClass sc = b.getMethod().getDeclaringClass();
 		String name = sc.getName();
-
-		prepare();
-
 		if (name.startsWith("android") || name.startsWith("java") || name.startsWith("com.facebook")||name.startsWith("org.eclipse"))
 			return;
-
 		if (isActivity(sc)) {
 			instrumentActivity(sc);
 		}
 		instrumentBody(b);
-		instrumentCoverage(b);
 		countNumbers(b);
+		instrumentCoverage(b);
 
 		new SignCheckRemover(b).removeSignCheckingStmt();
 	}
 
-	/**
-	 * prepare to instrument classes and fields
-	 */
-	private void prepare() {
-		if (!classIntrumented) {
-			instrumentApplicationClasses();
-			instrumentFieldForMainActivity();
-			classIntrumented = true;
-		}
-	}
-
 	private void instrumentApplicationClasses() {
-		new ApplicationClassInstrumenter().instrument();
+		new ApplicationClassInstrumenter(CallGraphBuilder.getApplicationClasses()).instrument();
 	}
 	
 	private void instrumentFieldForMainActivity() {
-		new FieldInstrumenter(Global.v().getmActivity()).instrument();
+		new FieldInstrumenter(Global.v().getMainActivityClass()).instrument();
 	}
 
 	private boolean isActivity(SootClass sc) {
 		String name = sc.getName();
 		if (activities.contains(name)) {//remove visited activity.
-			activities.remove(sc.getName());
+			activities.remove(name);
 			return true;
 		}
 		return false;
@@ -124,8 +105,8 @@ public class AppBodyTransformer extends BodyTransformer implements GlobalHost {
 			Main.totalLine = Main.totalLine + units.size();
 			Main.totalMethod++;
 			Main.methods.add(b.getMethod().getSignature());
-			if (sc.getName() != lastClass) {
-				lastClass = sc.getName();
+			if (sc.getName() != previousClassName) {
+				previousClassName = sc.getName();
 				Main.totalClass++;
 			}
 		}

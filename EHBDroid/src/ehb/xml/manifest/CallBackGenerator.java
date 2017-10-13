@@ -1,29 +1,18 @@
 package ehb.xml.manifest;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import ehb.global.Global;
 import ehb.global.GlobalHost;
 import ehb.xml.resource.ResourceAttributes;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CallBackGenerator implements GlobalHost{
 
 	private List<ResourceAttributes> resources;
 	private String file;
 	private Map<Integer,String> idToCallBack = new HashMap<>();
-	
-	/**
-	 * read resources from file
-	 * */
-	public CallBackGenerator(String file){
-		this.file = file;
-		resources = readFile(file);
-	}
 
 	public CallBackGenerator(List<ResourceAttributes> resources) {
 		this.resources = resources;
@@ -45,21 +34,6 @@ public class CallBackGenerator implements GlobalHost{
 		}
 	}
 	
-	private List<ResourceAttributes> readFile(String inputFile){
-		List<ResourceAttributes> result = new ArrayList<ResourceAttributes>();
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream(inputFile);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			result = (List<ResourceAttributes>) ois.readObject();
-			ois.close();
-			fis.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
 	public List<ResourceAttributes> getResources() {
 		return resources;
 	}
@@ -76,6 +50,4 @@ public class CallBackGenerator implements GlobalHost{
 	public void addToGlobal() {
 		Global.v().getIdToCallBack().putAll(idToCallBack);
 	}
-	
-	
 }

@@ -1,9 +1,9 @@
 package ehb.instrumentation;
 
+import com.app.test.constant.EHBMethod;
 import soot.SootClass;
 import soot.SootMethod;
 
-import com.app.test.Constants;
 import com.app.test.methodBuilder.Clinit;
 import com.app.test.methodBuilder.OnCreateOptionsMenu;
 import com.app.test.methodModifier.ClinitForActivityModifier;
@@ -58,7 +58,7 @@ public class MethodInstrumenter implements IInstrumenter {
 	}
 
 	private void addClinitForActivity(final SootClass sc) {
-		if (sc.equals(Global.v().getmActivity()))
+		if (sc.equals(Global.v().getMainActivityClass()))
 			new Clinit(sc, Clinit.SUBSIGNATURE, true).build();
 		else
 			new Clinit(sc, Clinit.SUBSIGNATURE, false).build();
@@ -66,7 +66,7 @@ public class MethodInstrumenter implements IInstrumenter {
 
 	private void addOnCreateOptionsMenuMethod(SootClass sc) {
 		OnCreateOptionsMenu optionMenu = new OnCreateOptionsMenu(sc,
-				Constants.EHBMethod.onCreateOptionsMenu_activity);
+				EHBMethod.onCreateOptionsMenu_activity);
 		optionMenu.build();
 	}
 

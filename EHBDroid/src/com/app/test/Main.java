@@ -40,15 +40,14 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String params[] = { "-android-jars", "D:/SDK/platforms", "-process-dir",
-				"L:/EHBbenchmarks/benchmark/" + AppDir.APPNAME + ".apk" };
+//		String params[] = { "-android-jars", "D:/SDK/platforms", "-process-dir",
+//				"L:/EHBbenchmarks/benchmark/" + AppDir.APPNAME + ".apk" };
+
+		// mac
+		String params[] = {"-android-jars", AppDir.SDK_PLATFORM, "-process-dir", AppDir.APP_PATH};
 		String apk = params[3];
-
-		EHBOptions.v().setStrategy(AppDir.STGY);
-
 		analyzeXML(apk);
 		analyzeCode(apk, params);
-
 		printEHBResult();
 	}
 
@@ -61,7 +60,6 @@ public class Main {
 		ProcessResource processResource = new ProcessResource();
 		processResource.loadResourceFile(apk);
 		List<ResourceAttributes> resourceAttributes = processResource.getResources();
-
 		CallBackGenerator generator = new CallBackGenerator(resourceAttributes);
 		generator.generate();
 		generator.addToGlobal();
@@ -73,9 +71,7 @@ public class Main {
 		cgb.build();
 		cgb.addToGlobal();
 		G.reset();
-
 		initSoot(params);
-
 		instrumentApp(params);
 	}
 
@@ -144,7 +140,6 @@ public class Main {
 			oos.writeObject(Global.v().getServiceToFilters());
 			oos.writeObject(Global.v().getReceiverToFilters());
 			oos.writeObject(Global.v().getMainActivity());
-			oos.writeObject(EHBOptions.v().getStrategy());
 			oos.flush();
 			oos.close();
 			fos.close();
@@ -173,13 +168,20 @@ public class Main {
 	}
 
 	public static void initSoot(String[] args) {
-		Options.v().set_soot_classpath(args[3] + ";" + "lib/rt.jar;" + "lib/jce.jar;" + "lib/tools.jar;"
-				+ "lib/android.jar;" + "lib/android-support-v4.jar;" + "bin");
+
+		// windows
+//		Options.v().set_soot_classpath(args[3] + ";" + "lib/rt.jar;" + "lib/jce.jar;" + "lib/tools.jar;"
+//				+ "lib/android.jar;" + "lib/android-support-v4.jar;" + "bin");
+
+		// mac
+		Options.v().set_soot_classpath(args[3] + ":" + "lib/rt.jar:" + "lib/jce.jar:" + "lib/tools.jar:"
+				+ "lib/android.jar:" + "lib/android-support-v4.jar:" + "bin");
+
 		Options.v().set_validate(true);
 		// Options.v().set_android_jars(args[1]);
 		Options.v().set_src_prec(Options.src_prec_apk);
-		 Options.v().set_output_format(Options.output_format_jimple);
-//		Options.v().set_output_format(Options.output_format_dex);
+//		 Options.v().set_output_format(Options.output_format_jimple);
+		Options.v().set_output_format(Options.output_format_dex);
 		Options.v().set_output_dir(output);
 		Options.v().set_allow_phantom_refs(true);
 

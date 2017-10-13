@@ -2,50 +2,41 @@ package ehb.analysis;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.app.test.*;
+import com.app.test.constant.EHBClass;
+import com.app.test.constant.EHBField;
+import com.app.test.constant.EHBMethod;
+import com.app.test.constant.LogTag;
+import com.app.test.event.*;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
-import soot.jimple.toolkits.callgraph.CHATransformer;
 import soot.options.Options;
 
-import com.app.test.AppDir;
-import com.app.test.CallBack;
-import com.app.test.Constants;
-import com.app.test.MathUtil;
-import com.app.test.Util;
 import com.app.test.data.AndroidIntentFilter;
 import com.app.test.data.PatternMatcher;
-import com.app.test.event.InterAppEvent;
-import com.app.test.event.InterAppEventHandler;
-import com.app.test.event.ReceiverEvent;
-import com.app.test.event.SystemEvent;
-import com.app.test.event.SystemEventConstants;
-import com.app.test.event.SystemEventHandler;
-import com.app.test.event.UIEvent;
-import com.app.test.event.UIEventHandler;
 
 import ehb.analysis.entryPointCreator.AndroidEntryPointCreator;
 import ehb.analysis.entryPointCreator.CallBackFunctionFromFileBuilder;
 import ehb.analysis.entryPointCreator.CallBackFunctionFromXMLBuilder;
-import ehb.global.EHBOptions;
 import ehb.global.Global;
 import ehb.global.GlobalHost;
 import ehb.instrumentation.codecoverage.CoverageToolkit;
 import ehb.xml.manifest.ProcessManifest;
 
-/**
- * 几乎用不到
- * */
 public class CallGraphBuilder implements GlobalHost{
 	
 	public static HashSet<String> entrypoints;
 	public static Set<String> classesAsSignature = new HashSet<>();
+
+	/**
+	 * ApplicationClasses are going to be instrumented into Apk.
+	 */
 	public static Set<String> applicationClasses= new HashSet<>();
 	
 	//class as SootClass.SIGNATURES and SootClass.BODIES
@@ -84,33 +75,29 @@ public class CallGraphBuilder implements GlobalHost{
         applicationClasses.add("android.view.View");
         applicationClasses.add("android.content.Context");
         applicationClasses.add("android.view.MenuItem$OnMenuItemClickListener");
-        applicationClasses.add(CallBack.class.getName());
+		applicationClasses.add(AppDir.class.getName());
+		applicationClasses.add(CallBack.class.getName());
         applicationClasses.add(Util.class.getName());
         applicationClasses.add(CoverageToolkit.class.getName());
-//      applicationClasses.add(IEventHandler.class.getName());
         applicationClasses.add(UIEventHandler.class.getName());
         applicationClasses.add(UIEventHandler.UIEventTesterForSeq.class.getName());
         applicationClasses.add(SystemEventHandler.class.getName());
 		applicationClasses.add(InterAppEventHandler.class.getName());
-		applicationClasses.add(UIEventHandler.UIEventTesterForSingleEvent.class.getName());
-//		applicationClasses.add(AbstractEventHandler.AppMenuItemClickListener.class.getName());
-		applicationClasses.add("com.app.test.event.SystemEventHandler$1");
 		applicationClasses.add("com.app.test.event.UIEventHandler$1");
+		applicationClasses.add("com.app.test.event.SystemEventHandler$1");
 		applicationClasses.add("com.app.test.event.InterAppEventHandler$1");
 		applicationClasses.add(SystemEventConstants.class.getName());
 		applicationClasses.add(UIEvent.class.getName());
-		applicationClasses.add(InterAppEvent.class.getName());
 		applicationClasses.add(SystemEvent.class.getName());
+		applicationClasses.add(InterAppEvent.class.getName());
 		applicationClasses.add(ReceiverEvent.class.getName());
-		applicationClasses.add(AppDir.class.getName());
 		applicationClasses.add(AndroidIntentFilter.class.getName());
 		applicationClasses.add(AndroidIntentFilter.AuthorityEntry.class.getName());
-		applicationClasses.add(Constants.LogTag.class.getName());
-		applicationClasses.add(Constants.EHBField.class.getName());
-		applicationClasses.add(Constants.EHBClass.class.getName());
-		applicationClasses.add(Constants.EHBMethod.class.getName());
+		applicationClasses.add(LogTag.class.getName());
+		applicationClasses.add(EHBField.class.getName());
+		applicationClasses.add(EHBClass.class.getName());
+		applicationClasses.add(EHBMethod.class.getName());
 		applicationClasses.add(PatternMatcher.class.getName());
-		applicationClasses.add(MathUtil.class.getName());
 	}
 
 	private String apkFileLocation; 
@@ -147,15 +134,6 @@ public class CallGraphBuilder implements GlobalHost{
 			Scene.v().addBasicClass(className, SootClass.BODIES);	
 		}		
 		Scene.v().loadNecessaryClasses();
-		
-		if(EHBOptions.v().isStaticAnalysis()){
-			Map<String, List<String>> buildCallBackFunctions = buildCallBackFunctions();
-			entrypoints.addAll(buildCallBackFunctions.keySet());
-			SootMethod entry2 = buildDummyMainMethod(buildCallBackFunctions); 
-			Scene.v().setEntryPoints(Collections.singletonList(entry2));
-			CHATransformer.v().transform();
-		}
-//		Global.v().setCallGraph(Scene.v().getCallGraph());
 	}
 
 	private Map<String, List<String>> buildCallBackFunctions() {

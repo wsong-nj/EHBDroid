@@ -1,5 +1,6 @@
 package com.app.test.methodBuilder;
 
+import com.app.test.constant.EHBField;
 import soot.Local;
 import soot.Modifier;
 import soot.Scene;

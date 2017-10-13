@@ -6,8 +6,7 @@ package com.app.test.event;
  * ui = btn;
  * listener = listener;
  * callbackName = onClick;
- * jump = true? onClick contains startActivity statement: false.
- * 
+ *
  * */
 public class UIEvent {
 	
@@ -19,22 +18,11 @@ public class UIEvent {
 	
 	//callback
 	public String callbackName;
-	
-	/**
-	 * @deprecated
-	 * */
-	public boolean jump;
-	
-	
-	public UIEvent(Object ui, Object listener, String rm, boolean jump) {
+
+	public UIEvent(Object ui, Object listener, String rm) {
 		this.ui = ui;
 		this.listener = listener;
 		this.callbackName = rm;
-		this.jump = jump;
-	}
-
-	public boolean isJump() {
-		return jump;
 	}
 
 	public Object getListener() {
@@ -47,5 +35,14 @@ public class UIEvent {
 	
 	public String getCallback() {
 		return callbackName;
+	}
+
+	@Override
+	public String toString() {
+		return "UIEvent{" +
+				"ui=" + ui +
+				", listener=" + listener +
+				", callbackName='" + callbackName + '\'' +
+				'}';
 	}
 }

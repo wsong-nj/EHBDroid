@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.app.test.Constants;
 
+import com.app.test.constant.EHBField;
 import soot.BooleanType;
 import soot.Local;
 import soot.Modifier;
@@ -22,7 +23,6 @@ import soot.jimple.NullConstant;
 import soot.jimple.ParameterRef;
 import soot.jimple.ReturnVoidStmt;
 import soot.jimple.StringConstant;
-import soot.jimple.ThisRef;
 
 
 /**
@@ -46,7 +46,7 @@ import soot.jimple.ThisRef;
 public class DoDialogReflect extends MethodBuilder {
 	
 	public static final String CLASSNAME = "doDialogReflect";
-	public static final String SUBSIGNATURE = "void doDialogReflect(android.app.Dialog,java.lang.Object,java.lang.String,boolean)";	
+	public static final String SUBSIGNATURE = "void doDialogReflect(android.app.Dialog,java.lang.Object,java.lang.String)";
 	
 	/**
 	 * @deprecated
@@ -60,13 +60,12 @@ public class DoDialogReflect extends MethodBuilder {
 	@Override
 	protected void addUnits() {
 		
-		Local param1,context,param2,param3, param4,booleanObj,exception,uieventJavaField,isvisited,uilinkedlist,
-			flag,booleanLocal, obj,isJump, classLocal;
+		Local param1,context,param2,param3, booleanObj,exception,uieventJavaField,isvisited,uilinkedlist,
+			flag,booleanLocal, obj, classLocal;
 		{
 			param1 = addLocal("param1", dialog_Type);
 			param2 = addLocal("param2", object_Type);
 			param3 = addLocal("param3", string_Type);
-			param4 = addLocal("param4", BooleanType.v());
 			flag = addLocal("flag", BooleanType.v());
 			uilinkedlist = addLocal("uilinkedlist", linkedList_Type);
 			booleanObj = addLocal("object2", object_Type);
@@ -76,7 +75,6 @@ public class DoDialogReflect extends MethodBuilder {
 			booleanLocal =  addLocal("booleanLocal", Boolean_Type);
 			context =  addLocal("context", context_Type);
 			obj = addLocal("obj", object_Type);
-			isJump = addLocal("isJump", BooleanType.v());
 			classLocal = addLocal("contextClass", class_Type);
 		}
 		
@@ -86,7 +84,6 @@ public class DoDialogReflect extends MethodBuilder {
 		addIdentityStmt(param1, new ParameterRef(dialog_Type,0));
 		addIdentityStmt(param2, new ParameterRef(object_Type,1));
 		addIdentityStmt(param3, new ParameterRef(string_Type,2));
-		addIdentityStmt(param4, new ParameterRef(BooleanType.v(),3));
 		//label0,
 		AssignStmt label0 = Jimple.v().newAssignStmt(context,Jimple.v().newVirtualInvokeExpr(param1,dialog_getContext_method.makeRef()));
 		//label1, 
@@ -100,7 +97,7 @@ public class DoDialogReflect extends MethodBuilder {
 		//Object obj = uievent_field.get(null); 
 		//LinkedList list = (LinkedList) obj;
 		addAssignStmt(classLocal, Jimple.v().newVirtualInvokeExpr(context, getClass_method.makeRef()));
-		addAssignStmt(uieventJavaField,Jimple.v().newVirtualInvokeExpr(classLocal,getField_method.makeRef(),StringConstant.v(Constants.EHBField.UIEVENTLINKEDLIST)));
+		addAssignStmt(uieventJavaField,Jimple.v().newVirtualInvokeExpr(classLocal,getField_method.makeRef(),StringConstant.v(EHBField.UIEVENTLINKEDLIST)));
 		addAssignStmt(obj,Jimple.v().newVirtualInvokeExpr(uieventJavaField, fieldGet_method.makeRef(), NullConstant.v()));
 		addAssignStmt(uilinkedlist, Jimple.v().newCastExpr(obj, linkedList_Type));
 		
@@ -116,10 +113,8 @@ public class DoDialogReflect extends MethodBuilder {
 		paramValues.add(param1);
 		paramValues.add(param2);
 		paramValues.add(param3);
-		paramValues.add(param4);
 		addInvokeStmt(Jimple.v().newSpecialInvokeExpr(uiEventLocal, Constants.uiEventinit_method.makeRef(),paramValues));
 		
-		//×¢ÊÍ
 		addInvokeStmt(Jimple.v().newVirtualInvokeExpr(uilinkedlist,offer_method.makeRef(),uiEventLocal));
 		body.getUnits().add(label1);
 		body.getUnits().add(label2);
@@ -144,7 +139,6 @@ public class DoDialogReflect extends MethodBuilder {
 		paramTypes.add(dialog_Type);
 		paramTypes.add(object_Type);
 		paramTypes.add(string_Type);
-		paramTypes.add(BooleanType.v());
 		currentMethod = new SootMethod(CLASSNAME, paramTypes, VoidType.v(),Modifier.PUBLIC|Modifier.STATIC);
 	}
 

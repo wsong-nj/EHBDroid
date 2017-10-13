@@ -2,6 +2,7 @@ package com.app.test.methodModifier;
 
 import java.util.Iterator;
 
+import com.app.test.constant.EHBField;
 import soot.Body;
 import soot.Local;
 import soot.PatchingChain;
@@ -12,10 +13,7 @@ import soot.Unit;
 import soot.jimple.AbstractStmtSwitch;
 import soot.jimple.AssignStmt;
 import soot.jimple.Jimple;
-import soot.jimple.ReturnStmt;
 import soot.jimple.ReturnVoidStmt;
-
-import com.app.test.Constants;
 
 public class OnCreateContextMenuModifier extends MethodModifier{
 
@@ -46,7 +44,7 @@ public class OnCreateContextMenuModifier extends MethodModifier{
 
 	private SootField getContextMenuField(Body b) {
 		SootClass declaringClass = b.getMethod().getDeclaringClass();
-		String actmenu = Constants.EHBField.CONTEXTMENU;
+		String actmenu = EHBField.CONTEXTMENU;
 		
 		if(!declaringClass.declaresFieldByName(actmenu))
 			throw new RuntimeException("Context menu field does not be declared");

@@ -3,6 +3,7 @@ package ehb.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.app.test.constant.EHBField;
 import soot.Body;
 import soot.Local;
 import soot.PatchingChain;
@@ -50,7 +51,7 @@ public class SystemEventDispatcher extends EventDispatcher{
 					systemEvent, Jimple.v().newNewExpr(Constants.systemEvent_Type)), stmt);
 			units.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newSpecialInvokeExpr(systemEvent, Constants.systemEventinit_method.makeRef(),values)), stmt);
 			units.insertBefore(Jimple.v().newAssignStmt(
-					linkedList, Jimple.v().newStaticFieldRef(Global.v().getmActivity().getFieldByName(Constants.EHBField.SYSTEMEVENTLINKEDLIST).makeRef())), stmt);
+					linkedList, Jimple.v().newStaticFieldRef(Global.v().getMainActivityClass().getFieldByName(EHBField.SYSTEMEVENTLINKEDLIST).makeRef())), stmt);
 			units.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(linkedList, Constants.offer_method.makeRef(),systemEvent)), stmt);
 			body.validate();
 		}
@@ -67,7 +68,7 @@ public class SystemEventDispatcher extends EventDispatcher{
 					receiverEvent, Jimple.v().newNewExpr(Constants.receiverEvent_Type)), stmt);
 			units.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newSpecialInvokeExpr(receiverEvent, Constants.receiverEventinit_method.makeRef(),values)), stmt);
 			units.insertBefore(Jimple.v().newAssignStmt(
-					linkedList, Jimple.v().newStaticFieldRef(Global.v().getmActivity().getFieldByName(Constants.EHBField.SYSTEMEVENTLINKEDLIST).makeRef())), stmt);
+					linkedList, Jimple.v().newStaticFieldRef(Global.v().getMainActivityClass().getFieldByName(EHBField.SYSTEMEVENTLINKEDLIST).makeRef())), stmt);
 			units.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(linkedList, Constants.offer_method.makeRef(),receiverEvent)), stmt);
 //			body.validate();
 		}

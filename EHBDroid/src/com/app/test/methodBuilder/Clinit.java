@@ -1,7 +1,6 @@
 package com.app.test.methodBuilder;
 
-import com.app.test.Constants;
-
+import com.app.test.constant.EHBField;
 import soot.Local;
 import soot.Modifier;
 import soot.Scene;
@@ -47,14 +46,14 @@ public class Clinit extends MethodBuilder{
 		// get mainActivity fields
 		mainActivity = Scene.v().getSootClass(Global.v().getMainActivity());
 		//start to instrument stmts.
-		for(String fieldName:Constants.EHBField.eventsLinkedList){
+		for(String fieldName: EHBField.eventsLinkedList){
 			SootField field = sc.getFieldByName(fieldName);
 			addAssignStmt(linkedList, new JNewExpr(linkedList_Type));
 			addInvokeStmt(Jimple.v().newSpecialInvokeExpr(linkedList, linkedListInit_method.makeRef()));
 			addAssignStmt(Jimple.v().newStaticFieldRef(field.makeRef()), linkedList);
 		}
 		
-		for(String fieldName:Constants.EHBField.visited){
+		for(String fieldName: EHBField.visited){
 			addAssignStmt(Jimple.v().newStaticFieldRef(sc.getFieldByName(fieldName).makeRef()),IntConstant.v(0));
 		}
 		
@@ -65,7 +64,7 @@ public class Clinit extends MethodBuilder{
 
 	private void addQueue(boolean main) {
 		if(main){
-			systemEventLinkedList = sc.getFieldByName(Constants.EHBField.SYSTEMEVENTLINKEDLIST);
+			systemEventLinkedList = sc.getFieldByName(EHBField.SYSTEMEVENTLINKEDLIST);
 			addAssignStmt(linkedList, new JNewExpr(linkedList_Type));
 			addInvokeStmt(Jimple.v().newSpecialInvokeExpr(linkedList, linkedListInit_method.makeRef()));
 			addAssignStmt(Jimple.v().newStaticFieldRef(systemEventLinkedList.makeRef()), linkedList);
