@@ -7,9 +7,8 @@ import java.util.LinkedList;
  */
 public class AppDir {
 
-    public final static String SDK_PLATFORM = "/Users/xiangxingqian/Library/android/sdk/platforms";
     public final static String APPNAME = "OpenSudoku";
-    public final static String APP_PATH = "/users/xiangxingqian/benchmark/apk/" + AppDir.APPNAME + ".apk"; // Your app path
+    public final static String APP_PATH = "benchmark/" + AppDir.APPNAME + ".apk"; // Your app path
     public final static String XMLEVENT = APPNAME + "_xmlevents";
     public static final int CLASSCOUNT = 400;
     public final static String SDCARD = "/mnt/sdcard/";

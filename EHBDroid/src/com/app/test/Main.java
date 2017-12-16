@@ -4,13 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import ehb.analysis.CallGraphBuilder;
-import ehb.global.EHBOptions;
 import ehb.global.Global;
 import ehb.xml.manifest.CallBackGenerator;
 import ehb.xml.manifest.ProcessManifest;
@@ -19,12 +15,10 @@ import ehb.xml.resource.ResourceAttributes;
 import soot.G;
 import soot.Scene;
 import soot.SootClass;
-import soot.Unit;
-import soot.jimple.InvokeExpr;
 import soot.options.Options;
 
 /**
- * This class the entry class of ENBDroid.
+ * EHBDroid entry
  */
 public class Main {
 
@@ -34,22 +28,47 @@ public class Main {
 	public static int totalLine;
 	public static int totalAct;
 
-	public static String output = "output" + "/" + AppDir.APPNAME;
+	public static String output = "output/"  + AppDir.APPNAME;
 	public static String xmleventStoration = output + "/" + AppDir.XMLEVENT + ".txt";
 	public static List<String> methods = new ArrayList<String>();
 
 	public static void main(String[] args) {
 
+		Map<String, String> map = System.getenv();
+		String platform = map.get("ANDROID_HOME")+"/platform"; //Android platform
+
 		// windows
-//		String params[] = { "-android-jars", "D:/SDK/platforms", "-process-dir",
-//				"L:/EHBbenchmarks/benchmark/" + AppDir.APPNAME + ".apk" };
+		//String params[] = { "-android-jars", platform, "-process-dir", AppDir.APP_PATH };
 
 		// mac
-		String params[] = {"-android-jars", AppDir.SDK_PLATFORM, "-process-dir", AppDir.APP_PATH};
+		String params[] = {"-android-jars", platform, "-process-dir", AppDir.APP_PATH};
+
 		String apk = params[3];
-		analyzeXML(apk);
-		analyzeCode(apk, params);
+		parseXML(apk);
+		parseJavaCode(apk, params);
 		printEHBResult();
+	}
+
+	private static void parseXML(String apk) {
+		ProcessManifest processMan = new ProcessManifest();
+		processMan.loadManifestFile(apk);
+		processMan.addToGlobal();
+
+		ProcessResource processResource = new ProcessResource();
+		processResource.loadResourceFile(apk);
+		List<ResourceAttributes> resourceAttributes = processResource.getResources();
+		CallBackGenerator generator = new CallBackGenerator(resourceAttributes);
+		generator.generate();
+		generator.addToGlobal();
+	}
+
+	private static void parseJavaCode(String apk, String[] params) {
+		CallGraphBuilder cgb = new CallGraphBuilder(apk);
+		cgb.build();
+		cgb.addToGlobal();
+		G.reset();
+		initSoot(params);
+		instrumentApp(params);
 	}
 
 	public static void initSoot(String[] args) {
@@ -63,9 +82,7 @@ public class Main {
 				+ "lib/android.jar:" + "lib/android-support-v4.jar:" + "bin");
 
 		Options.v().set_validate(true);
-		// Options.v().set_android_jars(args[1]);
 		Options.v().set_src_prec(Options.src_prec_apk);
-//		 Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_output_format(Options.output_format_dex);
 		Options.v().set_output_dir(output);
 		Options.v().set_allow_phantom_refs(true);
@@ -82,31 +99,6 @@ public class Main {
 		Scene.v().loadNecessaryClasses();
 	}
 
-	public static void analyzeXML(String apk) {
-
-		ProcessManifest processMan = new ProcessManifest();
-		processMan.loadManifestFile(apk);
-		processMan.addToGlobal();
-
-		ProcessResource processResource = new ProcessResource();
-		processResource.loadResourceFile(apk);
-		List<ResourceAttributes> resourceAttributes = processResource.getResources();
-		CallBackGenerator generator = new CallBackGenerator(resourceAttributes);
-		generator.generate();
-		generator.addToGlobal();
-	}
-
-	private static void analyzeCode(String apk, String[] params) {
-
-		CallGraphBuilder cgb = new CallGraphBuilder(apk);
-		cgb.build();
-		cgb.addToGlobal();
-		G.reset();
-		initSoot(params);
-		instrumentApp(params);
-	}
-
-	// print app info
 	private static void printEHBResult() {
 
 		// write counts and print appInfos
@@ -147,7 +139,7 @@ public class Main {
 	/**
 	 * store six elements:
 	 * viewToCallBacks,activityToFilters,serviceToFilters,receiverToFilters,
-	 * mainActivity,ehbstgy
+	 * mainActivity
 	 * 
 	 * @param location
 	 *            serializarion object
