@@ -11,7 +11,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.*;
 import android.content.Intent;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import com.app.test.constant.LogTag;
 
 /**
  * A class inserted into App.
@@ -44,12 +43,12 @@ public class Util {
      */
     public static void LogList(Object eventHandler) {
         String info = "List Event in Activity: " + eventHandler.getClass().getName() + " callBack: onListItemClick";
-        Log.e(LogTag.eventTag, info);
+        Log.e("gaga", info);
     }
 
     public static void LogPreference(Object eventHandler) {
         String info = "Preference Event in PreferenceActivity: " + eventHandler.getClass().getName();
-        Log.e(LogTag.eventTag, info);
+        Log.e("gaga", info);
     }
 
     /**
@@ -81,7 +80,7 @@ public class Util {
         }
         String eventHandlerName = eventHandler.getClass().getName();
         info = info + " eventHandler: " + eventHandlerName + " callBack: " + callBack + " Happens!!!";
-        Log.e(LogTag.eventTag, info);
+        Log.e("gaga", info);
     }
 
     /**
@@ -94,14 +93,14 @@ public class Util {
         String receiverName = broadcastReceiver.getClass().getName();
         String action = intent.getAction();
         String info = "BroadCastReceiver Event Receiver Name: " + receiverName + " Action: " + action + " Happens!!!!!!";
-        Log.e(LogTag.eventTag, info);
+        Log.e("gaga", info);
     }
 
     public static void LogInterAppEvent(Activity activity, Intent intent) {
         String receiverName = activity.getClass().getName();
         String action = intent.getAction();
         String info = "InterApp Event target name: " + receiverName + " Action: " + action + " Happens!!!!!!";
-        Log.e(LogTag.eventTag, info);
+        Log.e("gaga", info);
     }
 
     /**
@@ -117,7 +116,7 @@ public class Util {
         String managerName = manager.getClass().getName();
         String listenerName = listener.getClass().getName();
         String info = "Service Event Manager: " + managerName + " Listener: " + listenerName + " Method: " + method + " Happens!!!!!!";
-        Log.e(LogTag.eventTag, info);
+        Log.e("gaga", info);
     }
 
     public static void doPreferenceTest(Activity activity) {
@@ -126,7 +125,7 @@ public class Util {
 //		int cou = pScreen.getPreferenceCount();
         ListView listView = pActivity.getListView();
         int count = listView.getCount();
-        Log.e(LogTag.eventTag, "listView count: " + count + " listView child size: " + listView.getChildCount());
+        Log.e("gaga", "listView count: " + count + " listView child size: " + listView.getChildCount());
         for (int i = 0; i < count; i++) {
             pScreen.onItemClick(listView, null, i, 0);
         }
@@ -142,12 +141,12 @@ public class Util {
             if (targetException instanceof NoSuchFieldException) {
                 return;
             }
-            Log.e(LogTag.eventTag, "Bug Detected, InvocationTargetException!!! Message: " + e.getMessage() + " Caused by: " + e.getCause());
+            Log.e("gaga", "Bug Detected, InvocationTargetException!!! Message: " + e.getMessage() + " Caused by: " + e.getCause());
             targetException.printStackTrace();
         } else if (e instanceof NoSuchFieldException) {
             //let it go.
         } else {
-            Log.e(LogTag.eventTag, "Bug Detected!!! Message: " + e.getMessage() + " Caused by " + e.getCause());
+            Log.e("gaga", "Bug Detected!!! Message: " + e.getMessage() + " Caused by " + e.getCause());
             e.printStackTrace();
         }
     }
@@ -181,7 +180,7 @@ public class Util {
     }
 
     public static void outPrint(String s) {
-        Log.e(LogTag.sysoutTag, s);
+        Log.e("gaga", s);
     }
 
     /**

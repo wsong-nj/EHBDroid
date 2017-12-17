@@ -14,5 +14,6 @@ public class Test {
             System.out.println("main " + " Line14 " +s+" "+o);
         }
         System.out.println("main " + " Line16 " +map.get("ANDROID_HOME"));
+        System.out.println("main " + " Line17 " +Test.class.getName());
     }
 }

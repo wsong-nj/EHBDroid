@@ -31,7 +31,11 @@ public class ApplicationClassInstrumenter implements IInstrumenter {
 				continue;
 			SootClass sootClass = Scene.v().getSootClass(applicationClass);
 			if(!Scene.v().getApplicationClasses().contains(sootClass)){
-				sootClass.setApplicationClass();
+				try {
+					sootClass.setApplicationClass();
+				}catch (Exception e){
+
+				}
 			}
 		}
 	}

@@ -1,21 +1,18 @@
 package com.app.test;
 
+import ehb.analysis.CallGraphBuilder;
+import ehb.global.Global;
+import ehb.xml.manifest.ProcessManifest;
+import soot.G;
+import soot.Scene;
+import soot.SootClass;
+import soot.options.Options;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.*;
-
-import ehb.analysis.CallGraphBuilder;
-import ehb.global.Global;
-import ehb.xml.manifest.CallBackGenerator;
-import ehb.xml.manifest.ProcessManifest;
-import ehb.xml.resource.ProcessResource;
-import ehb.xml.resource.ResourceAttributes;
-import soot.G;
-import soot.Scene;
-import soot.SootClass;
-import soot.options.Options;
 
 /**
  * EHBDroid entry
@@ -54,12 +51,12 @@ public class Main {
 		processMan.loadManifestFile(apk);
 		processMan.addToGlobal();
 
-		ProcessResource processResource = new ProcessResource();
-		processResource.loadResourceFile(apk);
-		List<ResourceAttributes> resourceAttributes = processResource.getResources();
-		CallBackGenerator generator = new CallBackGenerator(resourceAttributes);
-		generator.generate();
-		generator.addToGlobal();
+//		ProcessResource processResource = new ProcessResource();
+//		processResource.loadResourceFile(apk);
+//		List<ResourceAttributes> resourceAttributes = processResource.getResources();
+//		CallBackGenerator generator = new CallBackGenerator(new ArrayList<>());
+//		generator.generate();
+//		generator.addToGlobal();
 	}
 
 	private static void parseJavaCode(String apk, String[] params) {
@@ -81,11 +78,14 @@ public class Main {
 		Options.v().set_soot_classpath(args[3] + ":" + "lib/rt.jar:" + "lib/jce.jar:" + "lib/tools.jar:"
 				+ "lib/android.jar:" + "lib/android-support-v4.jar:" + "bin");
 
-		Options.v().set_validate(true);
+//		Options.v().set_validate(true);
 		Options.v().set_src_prec(Options.src_prec_apk);
 		Options.v().set_output_format(Options.output_format_dex);
+//		Options.v().set_output_format(Options.output_format_jimple);
 		Options.v().set_output_dir(output);
 		Options.v().set_allow_phantom_refs(true);
+		Options.v().set_process_multiple_dex(true);
+		Options.v().set_android_api_version(23);
 
 		for (String classAsSignature : CallGraphBuilder.getClassesAsSignature()) {
 			Scene.v().addBasicClass(classAsSignature, SootClass.SIGNATURES);

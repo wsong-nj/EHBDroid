@@ -77,6 +77,7 @@ public class CallGraphBuilder implements GlobalHost{
         applicationClasses.add("android.view.MenuItem$OnMenuItemClickListener");
 		applicationClasses.add(AppDir.class.getName());
 		applicationClasses.add(CallBack.class.getName());
+		applicationClasses.add(Util2.class.getName());
         applicationClasses.add(Util.class.getName());
         applicationClasses.add(CoverageToolkit.class.getName());
         applicationClasses.add(UIEventHandler.class.getName());
@@ -106,17 +107,28 @@ public class CallGraphBuilder implements GlobalHost{
 	}
 
 	public void initSoot(){
-		Options.v().set_soot_classpath(apkFileLocation+";"+
-				"lib/rt.jar;" +
-				"lib/jce.jar;" +
-				"lib/tools.jar;" +
-				"lib/android.jar;"+
-				"lib/android-support-v4.jar;"+
-				"bin");	
+		// windows
+//		Options.v().set_soot_classpath(apkFileLocation+";"+
+//				"lib/rt.jar;" +
+//				"lib/jce.jar;" +
+//				"lib/tools.jar;" +
+//				"lib/android.jar;"+
+//				"lib/android-support-v4.jar;"+
+//				"bin");
+		//mac
+		Options.v().set_soot_classpath(apkFileLocation+":"+
+				"lib/rt.jar:" +
+				"lib/jce.jar:" +
+				"lib/tools.jar:" +
+				"lib/android.jar:"+
+				"lib/android-support-v4.jar:"+
+				"bin");
+
 		Options.v().set_src_prec(Options.src_prec_apk);
 		Options.v().set_output_format(Options.output_format_dex);
 		Options.v().set_allow_phantom_refs(true);
 		Options.v().set_keep_line_number(true);
+		Options.v().set_process_multiple_dex(true);
 		Options.v().set_no_output_source_file_attribute(true);		
 		Options.v().set_whole_program(true);
 	

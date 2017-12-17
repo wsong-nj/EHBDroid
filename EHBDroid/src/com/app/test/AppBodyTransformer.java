@@ -25,21 +25,6 @@ import ehb.instrumentation.codecoverage.CoverageBodyInstrumenter;
 import ehb.instrumentation.codecoverage.CoverageClassInstrumenter;
 import ehb.sign.SignCheckRemover;
 
-/**
- * There are three events in Android: UIEvent, SystemEvent, InterAppEvent.
- * <p>
- * UIEvent consists of: XML, Stmt and Method. SystemEvent consists of: XML and
- * stmt InterAppEvent consists of: XML.
- * <p>
- * 1. In event collecting and dispatching phase, Stmt of UIEvent and SystemEvent
- * are dispatched to belonging activity, and will be stored in every activity.
- * While the the belonging activity of event that defined in XML or method can
- * be easily found, there is no need to dispath them.
- * <p>
- * 2. In event triggerrig phase: UIEvent and SystemEventInterAppEvent are
- * triggerred seperately. UIEvent is controlled by "Test";
- * SystemEventInterAppEvent are controlled by "SysTest";
- */
 public class AppBodyTransformer extends BodyTransformer implements GlobalHost {
 
     public static Set<String> activities = (Set<String>) (((HashSet<String>) Global.v().getActivities()).clone());
@@ -48,28 +33,33 @@ public class AppBodyTransformer extends BodyTransformer implements GlobalHost {
 
     @Override
     protected void internalTransform(Body b, String phaseName, Map<String, String> options) {
-        if (!classInstrumented) {
-            instrumentApplicationClasses();
-            instrumentFieldForMainActivity();
-            classInstrumented = true;
+        try {
+            System.out.println("internalTransform " + " Line52 " +"do nothing");
+//            if (!classInstrumented) {
+//                instrumentApplicationClasses();
+//                instrumentFieldForMainActivity();
+//                classInstrumented = true;
+//            }
+//
+//            SootClass sc = b.getMethod().getDeclaringClass();
+//            String name = sc.getName();
+//            if (name.startsWith("android") || name.startsWith("java") || name.startsWith("com.facebook") || name.startsWith("org.eclipse"))
+//                return;
+//            if (isActivity(sc)) {
+//                instrumentActivity(sc);
+//            }
+//            instrumentBody(b);
+//            countNumbers(b);
+//
+//            if (!isExcludedBody(b)) {
+//                instrumentMethodCoverage(b, sc);
+//                countNumbers(b);
+//            }
+//
+//            new SignCheckRemover(b).removeSignCheckingStmt();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        SootClass sc = b.getMethod().getDeclaringClass();
-        String name = sc.getName();
-        if (name.startsWith("android") || name.startsWith("java") || name.startsWith("com.facebook") || name.startsWith("org.eclipse"))
-            return;
-        if (isActivity(sc)) {
-            instrumentActivity(sc);
-        }
-        instrumentBody(b);
-        countNumbers(b);
-
-        if (!isExcludedBody(b)) {
-            instrumentMethodCoverage(b, sc);
-            countNumbers(b);
-        }
-
-        new SignCheckRemover(b).removeSignCheckingStmt();
     }
 
     private void instrumentApplicationClasses() {
