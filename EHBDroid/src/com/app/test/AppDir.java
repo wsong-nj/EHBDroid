@@ -7,7 +7,7 @@ import java.util.LinkedList;
  */
 public class AppDir {
 
-    public final static String APPNAME = "app-defaultConfig-outer";
+    public final static String APPNAME = "网易新闻";
     public final static String APP_PATH = "benchmark/" + AppDir.APPNAME + ".apk"; // Your app path
     public final static String XMLEVENT = APPNAME + "_xmlevents";
     public static final int CLASSCOUNT = 400;
